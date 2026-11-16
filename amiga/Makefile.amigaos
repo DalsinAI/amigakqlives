@@ -1,0 +1,63 @@
+# KQ Lives for GFOS (AmigaOS 3.2 with GFOpenUp), 68040/68060, on our own
+# libraries: allegro4.library (GFOpenAllegro) for the screen, keys, sound
+# and datafiles, lua51.library (GFOpenLua) for the game's scripts. Soft
+# float with the stove's fpuauto (the FPU is used when there is one).
+#
+#   make -f amiga/Makefile.amigaos -j4 KQ=... ALLEG=... LUA51=... [STOVE=...]
+#
+# KQ is upstream at the commit package/kqlives.lock names; ALLEG is
+# GFOpenAllegro's build output (allegro4.library, liballeg.a) with its
+# include/ in ALLEG_INC; LUA51 is GFOpenLua's build output (lib/, include/).
+# package/build-amiga.sh fetches and builds all three. Upstream's code is
+# unchanged: amiga/kq_amiga.c is src/unix.c's part (where the files are),
+# amiga/music_silent.c stands in for src/music.c (no DUMB: no music yet).
+#
+# Output: build/amigaos/KQ/ (the drawer: KQ, data/, maps/, scripts/, Libs/
+# with the three libraries, User/ for saved games).
+
+KQ      ?= ../kq
+ALLEG   ?= ../gaout
+ALLEG_INC ?= ../ga/allegro4/include
+LUA51   ?= ../luaout
+STOVE   ?= $(HOME)/AmiCradle/kitchen/stoves/os32-gcc16-open6
+PREFIX  ?= $(STOVE)/prefix
+CC      = $(PREFIX)/bin/m68k-amigaos-gcc
+CPU     ?= -m68040 -msoft-float
+OPT     ?= -Os -fomit-frame-pointer -fno-tree-loop-distribute-patterns
+
+DEFS    = -DHAVE_CONFIG_H
+INC     = -Iamiga/include -I$(KQ)/include -I$(ALLEG_INC) -I$(LUA51)/include
+CFLAGS  = -noixemul $(OPT) $(CPU) $(DEFS) $(INC)
+# no --gc-sections: it drops the soft-float set-up (the first float use
+# then crashes)
+LDFLAGS = -noixemul $(CPU)
+LIBS    = $(ALLEG)/liballeg.a -L$(LUA51)/lib -llua51 -lm
+
+BUILD   = build/amigaos
+OBJDIR  = $(BUILD)/obj
+OUT     = $(BUILD)/KQ
+PROG    = KQ
+
+UPSTREAM = bounds combat console credits disk draw effects enemyc entity \
+           eqpmenu eskill fade heroc hskill intrface itemmenu kq magic \
+           markers masmenu menu movement res scrnshot selector setup sgame \
+           shopmenu timing
+AMIGA   = kq_amiga music_silent kq_version
+OBJS    = $(UPSTREAM:%=$(OBJDIR)/kq/%.o) $(AMIGA:%=$(OBJDIR)/%.o)
+
+all: $(OUT)/$(PROG)
+
+$(OUT)/$(PROG): $(OBJS)
+	@mkdir -p $(OUT)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+
+$(OBJDIR)/kq/%.o: $(KQ)/src/%.c $(wildcard $(KQ)/include/*.h) amiga/include/config.h
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -w -c -o $@ $<
+
+$(OBJDIR)/%.o: amiga/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -Wall -Werror -c -o $@ $<
+
+clean:
+	rm -rf $(BUILD)
