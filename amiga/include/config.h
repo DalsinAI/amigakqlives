@@ -20,8 +20,3 @@
  * NULL); lua51.library is Lua 5.1, whose lua_load takes four. lua.h
  * declares (lua_load) in brackets, so this macro only changes KQ's calls. */
 #define lua_load(L, reader, data, name, mode) lua_load(L, reader, data, name)
-/* Until allegro4.library has them (asked of GFOpenAllegro): the config
- * state stack, no-ops while its config calls keep only defaults
- * (amiga/a4_gaps.c) */
-void push_config_state(void);
-void pop_config_state(void);

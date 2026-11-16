@@ -7,7 +7,7 @@ KQ_VERSION=0.99.3
 PORT_VERSION=0.99.3-gfos1
 # allegro4.library and liballeg.a (GFOpenAllegro)
 ALLEGRO_URL=https://github.com/DalsinAI/gfopenallegro
-ALLEGRO_COMMIT=9b4a246e3f4c24bd8f1e1ebf7aad68d1632d2685
+ALLEGRO_COMMIT=bed49c23cd47b47a46a39ccab65cd3b52c18ffd9
 # acgame.library, which allegro4.library draws and reads input through
 ACGAME_URL=https://github.com/DalsinAI/acgame
 ACGAME_COMMIT=05f72b98d05044b149be315400bb6e196b42799d

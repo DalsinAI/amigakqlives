@@ -42,7 +42,7 @@ UPSTREAM = bounds combat console credits disk draw effects enemyc entity \
            eqpmenu eskill fade heroc hskill intrface itemmenu kq magic \
            markers masmenu menu movement res scrnshot selector setup sgame \
            shopmenu timing
-AMIGA   = kq_amiga music_silent kq_version a4_gaps
+AMIGA   = kq_amiga music_silent kq_version
 OBJS    = $(UPSTREAM:%=$(OBJDIR)/kq/%.o) $(AMIGA:%=$(OBJDIR)/%.o)
 
 all: $(OUT)/$(PROG)
