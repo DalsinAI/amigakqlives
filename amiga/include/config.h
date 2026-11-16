@@ -16,3 +16,7 @@
  * into Allegro's rest() */
 #define HAVE_SYS_SELECT_H 1
 #define ENABLE_NLS 0
+/* KQ 0.99.3 calls lua_load with Lua 5.2's fifth argument (the mode, always
+ * NULL); lua51.library is Lua 5.1, whose lua_load takes four. lua.h
+ * declares (lua_load) in brackets, so this macro only changes KQ's calls. */
+#define lua_load(L, reader, data, name, mode) lua_load(L, reader, data, name)
