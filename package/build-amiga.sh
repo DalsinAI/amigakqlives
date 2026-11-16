@@ -77,9 +77,7 @@ cp "$WORK/allegro-out/allegro4.library" "$ACGAME_LIB" "$WORK/lua51-out/lib/lua51
 cp "$WORK/kq/COPYING" "$D/COPYING"
 cp AMIGA_PORT.md "$D/ReadMe"
 # the icons and the Installer script (amiga/icons, amiga/Install-KQ)
-cp amiga/icons/KQ.info amiga/icons/ReadMe.info "$D/"
-cp amiga/icons/ReadMe.info "$D/COPYING.info"
-for dr in data maps scripts Libs User; do cp amiga/icons/Data.info "$D/$dr.info"; done
+for i in KQ ReadMe COPYING User data maps scripts Libs; do cp "amiga/icons/$i.info" "$D/"; done
 cp amiga/icons/KQ-drawer.info build/amigaos/KQ.info
 cp amiga/Install-KQ amiga/Install-KQ.info build/amigaos/
 grep -a -q '[$]VER: KQ ' "$D/KQ" || { echo "FAIL: no \$VER string in KQ"; exit 1; }
