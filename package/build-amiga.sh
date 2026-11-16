@@ -9,8 +9,10 @@
 #  5. the drawer build/amigaos/KQ: KQ, data/, maps/, scripts/ (KQ's Lua
 #     scripts through cpp, as upstream's scripts/Makefile.am does, and
 #     shipped as source: lua51.library reads source and bytecode alike),
-#     Libs/ with the three libraries, User/ for saved games. No music/:
-#     the port plays none yet.
+#     Libs/ with the three libraries, User/ for saved games, the icons and
+#     Install-KQ beside it. No music/: the port plays none yet;
+#  6. KQ-VERSION-68040.lha (tools/pack_dist.py) and OUT/Parts/KQ, a
+#     GFOpenUp part (package/write-part.sh).
 # Nothing is published from here.
 # MIT, Copyright (c) 2026 AmiCradle Team.
 set -eu
@@ -19,6 +21,9 @@ HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 ROOT=$(CDPATH= cd -- "$HERE/.." && pwd)
 . "$HERE/kqlives.lock"
 STOVE=${STOVE:-"$HOME/AmiCradle/kitchen/stoves/os32-gcc16-open6"}
+OUT=${OUT:-"$ROOT/build-amiga-package"}
+mkdir -p "$OUT"
+OUT=$(CDPATH= cd -- "$OUT" && pwd)
 # outside the checkout: Cradle cleans it (git clean -ffdx) before every job
 WORK=${WORK:-"$HOME/.cache/amigakqlives"}
 mkdir -p "$WORK"
@@ -45,7 +50,7 @@ STOVE="$STOVE" OUT="$WORK/allegro-out" sh "$WORK/gfopenallegro/allegro4/build-am
     { tail -n 40 "$WORK/allegro.log"; exit 1; }
 STOVE="$STOVE" OUT="$WORK/acgame-out" sh "$WORK/acgame/build-amiga.sh" > "$WORK/acgame.log" 2>&1 ||
     { tail -n 40 "$WORK/acgame.log"; exit 1; }
-STOVE="$STOVE" OUT="$WORK/lua51-out" ${LUA_TGZ:+LUA_TGZ="$LUA_TGZ"} sh "$WORK/gfopenlua/build-amiga.sh" > "$WORK/lua51.log" 2>&1 ||
+STOVE="$STOVE" OUT="$WORK/lua51-out" LUA_TGZ="${LUA_TGZ:-}" sh "$WORK/gfopenlua/build-amiga.sh" > "$WORK/lua51.log" 2>&1 ||
     { tail -n 40 "$WORK/lua51.log"; exit 1; }
 ACGAME_LIB=$(find "$WORK/acgame-out" -name acgame.library | head -n 1)
 [ -n "$ACGAME_LIB" ] || { echo "no acgame.library"; exit 1; }
@@ -71,7 +76,19 @@ sh tools/scripts.sh "$WORK/kq" "$D/scripts"
 cp "$WORK/allegro-out/allegro4.library" "$ACGAME_LIB" "$WORK/lua51-out/lib/lua51.library" "$D/Libs/"
 cp "$WORK/kq/COPYING" "$D/COPYING"
 cp AMIGA_PORT.md "$D/ReadMe"
+# the icons and the Installer script (amiga/icons, amiga/Install-KQ)
+cp amiga/icons/KQ.info amiga/icons/ReadMe.info "$D/"
+cp amiga/icons/ReadMe.info "$D/COPYING.info"
+for dr in data maps scripts Libs User; do cp amiga/icons/Data.info "$D/$dr.info"; done
+cp amiga/icons/KQ-drawer.info build/amigaos/KQ.info
+cp amiga/Install-KQ amiga/Install-KQ.info build/amigaos/
 grep -a -q '[$]VER: KQ ' "$D/KQ" || { echo "FAIL: no \$VER string in KQ"; exit 1; }
 ls -l "$D/KQ" "$D/Libs"
 echo "drawer: $(find "$D" -type f | wc -l) files, $(du -sk "$D" | cut -f1) KB"
+
+# 6. the archive (KQ-VERSION-68040.lha) and the GFOpenUp part
+python3 tools/pack_dist.py --dist build/amigaos --name KQ --out "$OUT"
+sh package/write-part.sh "$D" "$OUT/Parts/KQ" KQ "$PORT_VERSION" \
+    "KQ Lives: a classic console-style RPG, on allegro4.library and lua51.library"
+echo "part: $(grep -c '^copy' "$OUT/Parts/KQ/Part") files"
 echo "total: $(( $(date +%s) - t0 )) s"
