@@ -10,7 +10,8 @@
 # include/ in ALLEG_INC; LUA51 is GFOpenLua's build output (lib/, include/).
 # package/build-amiga.sh fetches and builds all three. Upstream's code is
 # unchanged: amiga/kq_amiga.c is src/unix.c's part (where the files are),
-# amiga/music_silent.c stands in for src/music.c (no DUMB: no music yet).
+# amiga/music_gfopenmusic.c stands in for src/music.c (DUMB): the songs
+# play through gfopenmusic.library (GFMUSIC is its build, with include/).
 #
 # Output: build/amigaos/KQ/ (the drawer: KQ, data/, maps/, scripts/, Libs/
 # with the three libraries, User/ for saved games).
@@ -19,6 +20,8 @@ KQ      ?= ../kq
 ALLEG   ?= ../gaout
 ALLEG_INC ?= ../ga/allegro4/include
 LUA51   ?= ../luaout
+GFMUSIC ?= ../gfopenmusic
+GFMUSIC_OUT ?= $(GFMUSIC)/build-amiga
 STOVE   ?= $(HOME)/AmiCradle/kitchen/stoves/os32-gcc16-open6
 PREFIX  ?= $(STOVE)/prefix
 CC      = $(PREFIX)/bin/m68k-amigaos-gcc
@@ -26,12 +29,12 @@ CPU     ?= -m68040 -msoft-float
 OPT     ?= -Os -fomit-frame-pointer -fno-tree-loop-distribute-patterns
 
 DEFS    = -DHAVE_CONFIG_H
-INC     = -Iamiga/include -I$(KQ)/include -I$(ALLEG_INC) -I$(LUA51)/include
+INC     = -Iamiga/include -I$(KQ)/include -I$(ALLEG_INC) -I$(LUA51)/include -I$(GFMUSIC)/include
 CFLAGS  = -noixemul $(OPT) $(CPU) $(DEFS) $(INC)
 # no --gc-sections: it drops the soft-float set-up (the first float use
 # then crashes)
 LDFLAGS = -noixemul $(CPU)
-LIBS    = $(ALLEG)/liballeg.a -L$(LUA51)/lib -llua51 -lm
+LIBS    = $(ALLEG)/liballeg.a -L$(LUA51)/lib -llua51 -L$(GFMUSIC_OUT)/lib -lgfopenmusic -lm
 
 BUILD   = build/amigaos
 OBJDIR  = $(BUILD)/obj
@@ -42,7 +45,7 @@ UPSTREAM = bounds combat console credits disk draw effects enemyc entity \
            eqpmenu eskill fade heroc hskill intrface itemmenu kq magic \
            markers masmenu menu movement res scrnshot selector setup sgame \
            shopmenu timing
-AMIGA   = kq_amiga music_silent kq_version
+AMIGA   = kq_amiga music_gfopenmusic kq_version
 OBJS    = $(UPSTREAM:%=$(OBJDIR)/kq/%.o) $(AMIGA:%=$(OBJDIR)/%.o)
 
 all: $(OUT)/$(PROG)

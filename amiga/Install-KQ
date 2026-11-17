@@ -1,4 +1,4 @@
-; $VER: Install-KQ 0.99.3-gfos1 (16.11.2026)
+; $VER: Install-KQ 0.99.3-gfos1 (17.11.2026)
 ; The Amiga Installer script for KQ, an AmiCradle game port.
 ; Made by amicradle scripts/ports/port_installer.py: change the spec, not this file.
 ; Run it from its icon, beside the KQ drawer where the archive was unpacked.
@@ -7,7 +7,7 @@
 (set #version "0.99.3-gfos1")
 (set #drawer "KQ")
 (set #program "KQ")
-(set #space 2930)  ; KB
+(set #space 5860)  ; KB
 
 (onerror
     (message (cat "KQ was not installed completely." "\n\n" @error-msg
@@ -51,7 +51,7 @@
 (set #free (if (>= @installer-version 2883584) (getdiskspace #parent "K")
     (/ (getdiskspace #parent) 1024)))
 (if (and (>= #free 0) (< #free #space))
-    (abort (cat "There is not enough room in " #parent ": KQ needs 3 MB free.")))
+    (abort (cat "There is not enough room in " #parent ": KQ needs 6 MB free.")))
 
 ; shared libraries: into LIBS:, where the one there is older or missing
 (copylib

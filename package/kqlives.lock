@@ -14,3 +14,6 @@ ACGAME_COMMIT=05f72b98d05044b149be315400bb6e196b42799d
 # lua51.library and liblua51.a (GFOpenLua)
 LUA51_URL=https://github.com/DalsinAI/gfopenlua
 LUA51_COMMIT=bff9afe708c8b252628c61ce4abe19f84c15e596
+# gfopenmusic.library and libgfopenmusic.a (GFOpenMusic): the songs
+GFMUSIC_URL=https://github.com/DalsinAI/gfopenmusic
+GFMUSIC_COMMIT=de993d6f16363947ca030bc2e69431fc1410263e

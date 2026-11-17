@@ -2,7 +2,9 @@
 # KQ for GFOS: the host tests.
 #  1. test_paths: amiga/kq_amiga.c's file paths (with stand-ins for Allegro
 #     and dos.library);
-#  2. every one of KQ's scripts, through tools/scripts.sh as the build
+#  2. test_music: amiga/music_gfopenmusic.c, KQ's songs on gfopenmusic
+#     (with stand-ins for exec and gfopenmusic);
+#  3. every one of KQ's scripts, through tools/scripts.sh as the build
 #     ships it, parses as Lua 5.1 (luac -p, built here from Lua 5.1.5's
 #     source, the Lua lua51.library is), and every script upstream's
 #     scripts/Makefile.am installs is there.
@@ -16,6 +18,9 @@ trap 'rm -rf "$T"' EXIT
 cc -Wall -Werror -I"$ROOT/tests/host/stubs" -I"$ROOT/amiga/include" -I"$KQ/include" \
     -o "$T/test_paths" "$ROOT/tests/host/test_paths.c" "$ROOT/amiga/kq_amiga.c"
 "$T/test_paths"
+cc -Wall -Werror -I"$ROOT/tests/host/stubs" -I"$ROOT/amiga/include" -I"$KQ/include" \
+    -o "$T/test_music" "$ROOT/tests/host/test_music.c" "$ROOT/amiga/music_gfopenmusic.c"
+"$T/test_music"
 
 mkdir -p "$T/lua"
 for f in "$LUA_SRC"/src/*.c; do

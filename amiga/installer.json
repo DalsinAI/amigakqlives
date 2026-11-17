@@ -5,7 +5,7 @@
   "program": "KQ",
   "cpu": "68040",
   "fpu": false,
-  "space": 3000000,
+  "space": 6000000,
   "modules": [],
   "libraries": ["acgame.library", "allegro4.library", "lua51.library"],
   "keep": ["User"],
