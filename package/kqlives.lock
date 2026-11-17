@@ -1,0 +1,19 @@
+# What the port builds, all fetched at these commits by package/build-amiga.sh
+# (none of it is kept in this repository).
+# KQ Lives 0.99.3 (C, Allegro 4, Lua 5.1; GPL-2)
+KQ_URL=https://github.com/OnlineCop/kq-fork
+KQ_COMMIT=6986fd5d697de0c943a6b625eea0d34413dee244
+KQ_VERSION=0.99.3
+PORT_VERSION=0.99.3-gfos1
+# allegro4.library and liballeg.a (GFOpenAllegro)
+ALLEGRO_URL=https://github.com/DalsinAI/gfopenallegro
+ALLEGRO_COMMIT=09617e9153765abc5e5e1488925e7baba893c783
+# acgame.library, which allegro4.library draws and reads input through
+ACGAME_URL=https://github.com/DalsinAI/acgame
+ACGAME_COMMIT=05f72b98d05044b149be315400bb6e196b42799d
+# lua51.library and liblua51.a (GFOpenLua)
+LUA51_URL=https://github.com/DalsinAI/gfopenlua
+LUA51_COMMIT=bff9afe708c8b252628c61ce4abe19f84c15e596
+# gfopenmusic.library and libgfopenmusic.a (GFOpenMusic): the songs
+GFMUSIC_URL=https://github.com/DalsinAI/gfopenmusic
+GFMUSIC_COMMIT=de993d6f16363947ca030bc2e69431fc1410263e

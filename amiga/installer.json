@@ -1,0 +1,15 @@
+{
+  "name": "KQ",
+  "version": "0.99.3-gfos1",
+  "drawer": "KQ",
+  "program": "KQ",
+  "cpu": "68040",
+  "fpu": false,
+  "space": 6000000,
+  "modules": [],
+  "libraries": ["acgame.library", "allegro4.library", "lua51.library"],
+  "keep": ["User"],
+  "parent": "Work:Games",
+  "badge": "icons/art/kq.png",
+  "script": "Install-KQ"
+}
